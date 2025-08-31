@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelters - DonateBridge</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Your Navbar, Header, and Search sections remain unchanged -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-heart rotating-icon"></i> DonateBridge</a>
+            <a href="index.html" class="btn-outline-custom"><i class="fas fa-home me-2"></i>Home</a>
+        </div>
+    </nav>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content text-center">
+                <h1 class="page-title">Animal Shelters Across India</h1>
+                <p class="page-subtitle">Discover verified shelters and rescue organizations nationwide. See their real needs and make a targeted impact.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="search-filter-section fade-in">
+             <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="position-relative">
+                        <input type="text" id="searchBar" class="form-control search-input" placeholder=" Search shelters by name or city...">
+                        <i class="fas fa-search position-absolute" style="right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-light);"></i>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <select id="locationFilter" class="form-control search-input">
+                        <option value="">All Locations</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Bhopal">Bhopal</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex gap-2 flex-wrap filter-buttons">
+                        <button class="filter-btn active" data-filter="all"><i class="fas fa-th-large me-2"></i>All</button>
+                        <button class="filter-btn" data-filter="dogs"><i class="fas fa-dog me-2"></i>Dogs</button>
+                        <button class="filter-btn" data-filter="cats"><i class="fas fa-cat me-2"></i>Cats</button>
+                        <button class="filter-btn" data-filter="wildlife"><i class="fas fa-kiwi-bird me-2"></i>Wildlife</button>
+                        <button class="filter-btn" data-filter="urgent"><i class="fas fa-exclamation-triangle me-2"></i>Urgent</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading shelters...</p>
+        </div>
+        
+        <div class="row g-4" id="shelterList">
+            <!-- This will be populated by js/main.js -->
+        </div>
+
+        <div class="no-results d-none" id="noResults">
+            <i class="fas fa-search"></i>
+            <h3>No shelters found</h3>
+            <p>Try adjusting your search terms or filters.</p>
+        </div>
+
+        <div class="text-center mt-5">
+            <button class="btn-custom" id="loadMoreBtn" style="display: none;"> <!-- Hide for now -->
+                <i class="fas fa-plus me-2"></i>Load More Shelters
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="text-center">
+                <p>&copy; 2025 DonateBridge. A community project making India more compassionate, one donation at a time.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT PLACEMENT: Best practice is to place scripts at the end of the body -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
+

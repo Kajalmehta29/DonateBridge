@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter Dashboard - DonateBridge</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">🐾 DonateBridge</a>
+            <button id="logoutButton" class="btn btn-outline-custom">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container py-5 mt-5">
+        <div id="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Loading Shelter...</p>
+        </div>
+
+        <div id="dashboard-content" class="d-none">
+            <h1 id="shelter-name-heading" class="mb-4">Managing Needs for: ...</h1>
+            
+            <div class="row g-4">
+                <!-- Needs Management Column -->
+                <div class="col-lg-7">
+                    <div class="card shelter-info-card">
+                        <h4 class="mb-3"><i class="fas fa-list-ul me-2"></i>Current Needs List</h4>
+                        <ul class="list-group mb-3" id="needs-list">
+                            <!-- Needs will be loaded here -->
+                        </ul>
+
+                        <h4 class="mt-4 mb-3"><i class="fas fa-plus-circle me-2"></i>Add a New Need</h4>
+                        <form id="add-need-form">
+                            <div class="mb-3">
+                                <label for="need-title" class="form-label">Item Title</label>
+                                <input type="text" id="need-title" class="form-control" placeholder="e.g., 50kg Rice Bags" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="need-category" class="form-label">Category</label>
+                                <select id="need-category" class="form-select" required>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="New Item">New Item</option>
+                                    <option value="Pre-Loved">Pre-Loved</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-custom w-100">Add Need</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Shelter Profile Column -->
+                <div class="col-lg-5">
+                    <div class="card shelter-info-card">
+                        <h4 class="mb-3"><i class="fas fa-edit me-2"></i>Edit Shelter Profile</h4>
+                        <form id="edit-profile-form">
+                            <!-- Basic Info -->
+                            <div class="mb-3">
+                                <label for="shelterName" class="form-label">Shelter Name</label>
+                                <input type="text" id="shelterName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" class="form-control" rows="3"></textarea>
+                            </div>
+                             <div class="mb-3">
+                                <label for="shelterImage" class="form-label">Shelter Image</label>
+                                <input type="file" id="shelterImage" class="form-control" accept="image/png, image/jpeg">
+                                <small class="form-text text-muted">Upload a new photo to replace the current one.</small>
+                            </div>
+
+                            <!-- Social Media -->
+                            <h5 class="mt-4 mb-3"><i class="fas fa-share-alt me-2"></i>Social Media Links</h5>
+                             <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                <input type="url" id="websiteUrl" class="form-control" placeholder="https://yourshelter.org">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fab fa-facebook"></i></span>
+                                <input type="url" id="facebookUrl" class="form-control" placeholder="https://facebook.com/yourshelter">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="fab fa-instagram"></i></span>
+                                <input type="url" id="instagramUrl" class="form-control" placeholder="https://instagram.com/yourshelter">
+                            </div>
+                            
+                            <!-- Financial & Contact Info -->
+                            <h5 class="mt-4 mb-3"><i class="fas fa-money-check-alt me-2"></i>Financial & Contact Info</h5>
+                            <div class="mb-3">
+                                <label for="contactPhone" class="form-label">Contact Phone</label>
+                                <input type="tel" id="contactPhone" class="form-control" placeholder="+91-123-456-7890">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fullAddress" class="form-label">Full Address</label>
+                                <textarea id="fullAddress" class="form-control" rows="2" placeholder="Your complete drop-off address"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="upiId" class="form-label">UPI ID</label>
+                                <input type="text" id="upiId" class="form-control" placeholder="yourshelter@upi">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bankAccountName" class="form-label">Bank Account Name</label>
+                                <input type="text" id="bankAccountName" class="form-control" placeholder="Official Shelter Name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bankAccountNumber" class="form-label">Bank Account Number</label>
+                                <input type="text" id="bankAccountNumber" class="form-control" placeholder="123456789012">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bankIfscCode" class="form-label">Bank IFSC Code</label>
+                                <input type="text" id="bankIfscCode" class="form-control" placeholder="BANK0123456">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-custom w-100">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+                const SUPABASE_URL = 'https://lgrdixuixmjdsheyxsys.supabase.co'; // Replace
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxncmRpeHVpeG1qZHNoZXl4c3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1Nzc4NTIsImV4cCI6MjA3MjE1Mzg1Mn0.2D16XP4T2yccB038m5GWkr_HzkTnsnbc2qcyrQ22Jk4'; 
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const loadingDiv = document.getElementById('loading');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const shelterNameHeading = document.getElementById('shelter-name-heading');
+        const needsList = document.getElementById('needs-list');
+        const addNeedForm = document.getElementById('add-need-form');
+        const editProfileForm = document.getElementById('edit-profile-form');
+        const logoutButton = document.getElementById('logoutButton');
+
+        let currentShelter = null;
+        let currentUser = null;
+
+        async function checkAuthAndLoadData() {
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = session.user;
+            
+            const { data: shelterData, error } = await supabase
+                .from('shelters')
+                .select('*')
+                .eq('manager_user_id', currentUser.id)
+                .single();
+
+            if (error || !shelterData) {
+                window.location.href = 'register-shelter.html';
+                return;
+            }
+            
+            currentShelter = shelterData;
+            displayShelterInfo();
+            await loadNeeds();
+            
+            loadingDiv.classList.add('d-none');
+            dashboardContent.classList.remove('d-none');
+        }
+
+        function displayShelterInfo() {
+            shelterNameHeading.textContent = `Managing Needs for: ${currentShelter.name}`;
+            // Basic Info
+            document.getElementById('shelterName').value = currentShelter.name || '';
+            document.getElementById('description').value = currentShelter.description || '';
+            // Social Media
+            document.getElementById('websiteUrl').value = currentShelter.website_url || '';
+            document.getElementById('facebookUrl').value = currentShelter.facebook_url || '';
+            document.getElementById('instagramUrl').value = currentShelter.instagram_url || '';
+            // Financial & Contact
+            document.getElementById('contactPhone').value = currentShelter.contact_phone || '';
+            document.getElementById('fullAddress').value = currentShelter.full_address || '';
+            document.getElementById('upiId').value = currentShelter.upi_id || '';
+            document.getElementById('bankAccountName').value = currentShelter.bank_account_name || '';
+            document.getElementById('bankAccountNumber').value = currentShelter.bank_account_number || '';
+            document.getElementById('bankIfscCode').value = currentShelter.bank_ifsc_code || '';
+        }
+
+        async function loadNeeds() {
+            const { data, error } = await supabase
+                .from('needs')
+                .select('*')
+                .eq('shelter_id', currentShelter.id)
+                .order('created_at', { ascending: false });
+
+            needsList.innerHTML = '';
+            if (data && data.length > 0) {
+                data.forEach(need => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        <span>${need.title} <span class="badge bg-secondary">${need.category}</span></span>
+                        <button class="btn btn-sm btn-danger delete-need-btn" data-id="${need.id}"><i class="fas fa-trash"></i></button>
+                    `;
+                    needsList.appendChild(li);
+                });
+            } else {
+                needsList.innerHTML = '<li class="list-group-item">No needs added yet.</li>';
+            }
+        }
+
+        async function handleProfileUpdate(e) {
+            e.preventDefault();
+            const imageFile = document.getElementById('shelterImage').files[0];
+            let imagePath = currentShelter.image_url; 
+
+            if (imageFile) {
+                const newFileName = `${currentUser.id}/${Date.now()}-${imageFile.name}`;
+                const { error: uploadError } = await supabase.storage
+                    .from('shelter-images')
+                    .upload(newFileName, imageFile, { upsert: true });
+
+                if (uploadError) {
+                    alert('Error uploading image: ' + uploadError.message);
+                    return;
+                }
+                imagePath = newFileName;
+            }
+
+            const updatedData = {
+                name: document.getElementById('shelterName').value,
+                description: document.getElementById('description').value,
+                website_url: document.getElementById('websiteUrl').value,
+                facebook_url: document.getElementById('facebookUrl').value,
+                instagram_url: document.getElementById('instagramUrl').value,
+                contact_phone: document.getElementById('contactPhone').value,
+                full_address: document.getElementById('fullAddress').value,
+                upi_id: document.getElementById('upiId').value,
+                bank_account_name: document.getElementById('bankAccountName').value,
+                bank_account_number: document.getElementById('bankAccountNumber').value,
+                bank_ifsc_code: document.getElementById('bankIfscCode').value,
+                image_url: imagePath,
+            };
+
+            const { error } = await supabase
+                .from('shelters')
+                .update(updatedData)
+                .eq('id', currentShelter.id);
+
+            if (error) {
+                alert('Error updating profile: ' + error.message);
+            } else {
+                alert('Profile updated successfully!');
+                currentShelter = {...currentShelter, ...updatedData};
+                displayShelterInfo();
+            }
+        }
+
+        addNeedForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('need-title').value;
+            const category = document.getElementById('need-category').value;
+
+            const { error } = await supabase.from('needs').insert({
+                title,
+                category,
+                shelter_id: currentShelter.id,
+                user_id: currentUser.id
+            });
+
+            if (error) {
+                alert('Error adding need: ' + error.message);
+            } else {
+                addNeedForm.reset();
+                await loadNeeds();
+            }
+        });
+
+        needsList.addEventListener('click', async (e) => {
+            if (e.target.closest('.delete-need-btn')) {
+                const needId = e.target.closest('.delete-need-btn').dataset.id;
+                if (confirm('Are you sure you want to delete this need?')) {
+                    const { error } = await supabase.from('needs').delete().eq('id', needId);
+                    if (error) {
+                        alert('Error deleting need: ' + error.message);
+                    } else {
+                        await loadNeeds();
+                    }
+                }
+            }
+        });
+        
+        logoutButton.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+
+        editProfileForm.addEventListener('submit', handleProfileUpdate);
+
+        checkAuthAndLoadData();
+    </script>
+</body>
+</html>
+
