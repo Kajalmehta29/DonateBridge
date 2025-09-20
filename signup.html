@@ -35,39 +35,7 @@
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        const SUPABASE_URL = 'https://lgrdixuixmjdsheyxsys.supabase.co'; // Replace
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxncmRpeHVpeG1qZHNoZXl4c3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1Nzc4NTIsImV4cCI6MjA3MjE1Mzg1Mn0.2D16XP4T2yccB038m5GWkr_HzkTnsnbc2qcyrQ22Jk4'; // Replace
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const signupForm = document.getElementById('signup-form');
-        const messageDiv = document.getElementById('message');
-
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // First, sign up the user
-            const { data: { user }, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                messageDiv.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
-            } else {
-                // IMPORTANT CHANGE:
-                // Instead of showing a message, we now redirect to the shelter registration page.
-                // The user still needs to confirm their email, but we can let them fill out the form now.
-                messageDiv.innerHTML = `<div class="alert alert-success">Success! Redirecting you to register your shelter...</div>`;
-                setTimeout(() => {
-                    window.location.href = 'register-shelter.html';
-                }, 1500);
-            }
-        });
-    </script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
 

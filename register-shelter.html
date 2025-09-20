@@ -66,60 +66,6 @@
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        const SUPABASE_URL = 'https://lgrdixuixmjdsheyxsys.supabase.co'; // Replace
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxncmRpeHVpeG1qZHNoZXl4c3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1Nzc4NTIsImV4cCI6MjA3MjE1Mzg1Mn0.2D16XP4T2yccB038m5GWkr_HzkTnsnbc2qcyrQ22Jk4'; // Replace
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const registerForm = document.getElementById('register-form');
-        const messageContainer = document.getElementById('message-container');
-        let currentUser = null;
-
-        // Auth Guard: Check if user is logged in
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                // If not logged in, redirect them to the login page
-                window.location.href = 'login.html';
-                return;
-            }
-            currentUser = session.user;
-        }
-
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Get selected animal types
-            const animalTypes = [];
-            if (document.getElementById('type-dogs').checked) animalTypes.push('dogs');
-            if (document.getElementById('type-cats').checked) animalTypes.push('cats');
-            if (document.getElementById('type-wildlife').checked) animalTypes.push('wildlife');
-
-            const shelterData = {
-                name: document.getElementById('shelter-name').value,
-                location_city: document.getElementById('shelter-city').value,
-                location_state: document.getElementById('shelter-state').value,
-                description: document.getElementById('shelter-description').value,
-                image_url: document.getElementById('shelter-image').value,
-                animal_types: animalTypes.join(' '), // e.g., "dogs cats"
-                manager_user_id: currentUser.id // This is the automatic link!
-            };
-
-            const { data, error } = await supabase.from('shelters').insert([shelterData]);
-
-            if (error) {
-                messageContainer.innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
-            } else {
-                messageContainer.innerHTML = `<div class="alert alert-success">Shelter registered successfully! Redirecting you to your dashboard...</div>`;
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
-            }
-        });
-
-        // Run the auth check as soon as the page loads
-        checkSession();
-    </script>
+   <script type="module" src="js/app.js"></script>
 </body>
 </html>

@@ -35,58 +35,7 @@
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        const SUPABASE_URL = 'https://lgrdixuixmjdsheyxsys.supabase.co'; // Replace
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxncmRpeHVpeG1qZHNoZXl4c3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1Nzc4NTIsImV4cCI6MjA3MjE1Mzg1Mn0.2D16XP4T2yccB038m5GWkr_HzkTnsnbc2qcyrQ22Jk4'; // Replace
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const loginForm = document.getElementById('login-form');
-        const messageDiv = document.getElementById('message');
-
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            messageDiv.innerHTML = '<p class="text-info">Logging in...</p>';
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // Step 1: Sign in the user with their email and password.
-            const { data: { user }, error: loginError } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (loginError) {
-                messageDiv.innerHTML = `<div class="alert alert-danger">${loginError.message}</div>`;
-                return;
-            }
-
-            // If login is successful, 'user' will contain their details, including their unique ID.
-            if (user) {
-                // Step 2: Check if this user already manages a shelter.
-                // We query the 'shelters' table to find a row where 'manager_user_id' matches the logged-in user's ID.
-                const { data: shelter, error: shelterError } = await supabase
-                    .from('shelters')
-                    .select('id') // We only need to check if a record exists, so we just select 'id'.
-                    .eq('manager_user_id', user.id)
-                    .single(); // Use .single() because we expect one user to manage only one shelter.
-
-                if (shelterError && shelterError.code !== 'PGRST116') {
-                    // An actual error occurred (other than 'not found').
-                    messageDiv.innerHTML = `<div class="alert alert-danger">Could not verify shelter status: ${shelterError.message}</div>`;
-                    return;
-                }
-                
-                if (shelter) {
-                    // SUCCESS CASE: A shelter was found for this user. Redirect to the dashboard.
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // NEW USER CASE: No shelter was found. Redirect to the registration page.
-                    window.location.href = 'register-shelter.html';
-                }
-            }
-        });
-    </script>
+   <script type="module" src="js/app.js"></script>
 </body>
 </html>
 

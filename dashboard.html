@@ -67,11 +67,11 @@
                                 <label for="description" class="form-label">Description</label>
                                 <textarea id="description" class="form-control" rows="3"></textarea>
                             </div>
-                             <div class="mb-3">
+                             <!-- <div class="mb-3">
                                 <label for="shelterImage" class="form-label">Shelter Image</label>
                                 <input type="file" id="shelterImage" class="form-control" accept="image/png, image/jpeg">
                                 <small class="form-text text-muted">Upload a new photo to replace the current one.</small>
-                            </div>
+                            </div> -->
 
                             <!-- Social Media -->
                             <h5 class="mt-4 mb-3"><i class="fas fa-share-alt me-2"></i>Social Media Links</h5>
@@ -122,182 +122,7 @@
             </div>
         </div>
     </div>
-
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-                const SUPABASE_URL = 'https://lgrdixuixmjdsheyxsys.supabase.co'; // Replace
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxncmRpeHVpeG1qZHNoZXl4c3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1Nzc4NTIsImV4cCI6MjA3MjE1Mzg1Mn0.2D16XP4T2yccB038m5GWkr_HzkTnsnbc2qcyrQ22Jk4'; 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const loadingDiv = document.getElementById('loading');
-        const dashboardContent = document.getElementById('dashboard-content');
-        const shelterNameHeading = document.getElementById('shelter-name-heading');
-        const needsList = document.getElementById('needs-list');
-        const addNeedForm = document.getElementById('add-need-form');
-        const editProfileForm = document.getElementById('edit-profile-form');
-        const logoutButton = document.getElementById('logoutButton');
-
-        let currentShelter = null;
-        let currentUser = null;
-
-        async function checkAuthAndLoadData() {
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html';
-                return;
-            }
-            currentUser = session.user;
-            
-            const { data: shelterData, error } = await supabase
-                .from('shelters')
-                .select('*')
-                .eq('manager_user_id', currentUser.id)
-                .single();
-
-            if (error || !shelterData) {
-                window.location.href = 'register-shelter.html';
-                return;
-            }
-            
-            currentShelter = shelterData;
-            displayShelterInfo();
-            await loadNeeds();
-            
-            loadingDiv.classList.add('d-none');
-            dashboardContent.classList.remove('d-none');
-        }
-
-        function displayShelterInfo() {
-            shelterNameHeading.textContent = `Managing Needs for: ${currentShelter.name}`;
-            // Basic Info
-            document.getElementById('shelterName').value = currentShelter.name || '';
-            document.getElementById('description').value = currentShelter.description || '';
-            // Social Media
-            document.getElementById('websiteUrl').value = currentShelter.website_url || '';
-            document.getElementById('facebookUrl').value = currentShelter.facebook_url || '';
-            document.getElementById('instagramUrl').value = currentShelter.instagram_url || '';
-            // Financial & Contact
-            document.getElementById('contactPhone').value = currentShelter.contact_phone || '';
-            document.getElementById('fullAddress').value = currentShelter.full_address || '';
-            document.getElementById('upiId').value = currentShelter.upi_id || '';
-            document.getElementById('bankAccountName').value = currentShelter.bank_account_name || '';
-            document.getElementById('bankAccountNumber').value = currentShelter.bank_account_number || '';
-            document.getElementById('bankIfscCode').value = currentShelter.bank_ifsc_code || '';
-        }
-
-        async function loadNeeds() {
-            const { data, error } = await supabase
-                .from('needs')
-                .select('*')
-                .eq('shelter_id', currentShelter.id)
-                .order('created_at', { ascending: false });
-
-            needsList.innerHTML = '';
-            if (data && data.length > 0) {
-                data.forEach(need => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    li.innerHTML = `
-                        <span>${need.title} <span class="badge bg-secondary">${need.category}</span></span>
-                        <button class="btn btn-sm btn-danger delete-need-btn" data-id="${need.id}"><i class="fas fa-trash"></i></button>
-                    `;
-                    needsList.appendChild(li);
-                });
-            } else {
-                needsList.innerHTML = '<li class="list-group-item">No needs added yet.</li>';
-            }
-        }
-
-        async function handleProfileUpdate(e) {
-            e.preventDefault();
-            const imageFile = document.getElementById('shelterImage').files[0];
-            let imagePath = currentShelter.image_url; 
-
-            if (imageFile) {
-                const newFileName = `${currentUser.id}/${Date.now()}-${imageFile.name}`;
-                const { error: uploadError } = await supabase.storage
-                    .from('shelter-images')
-                    .upload(newFileName, imageFile, { upsert: true });
-
-                if (uploadError) {
-                    alert('Error uploading image: ' + uploadError.message);
-                    return;
-                }
-                imagePath = newFileName;
-            }
-
-            const updatedData = {
-                name: document.getElementById('shelterName').value,
-                description: document.getElementById('description').value,
-                website_url: document.getElementById('websiteUrl').value,
-                facebook_url: document.getElementById('facebookUrl').value,
-                instagram_url: document.getElementById('instagramUrl').value,
-                contact_phone: document.getElementById('contactPhone').value,
-                full_address: document.getElementById('fullAddress').value,
-                upi_id: document.getElementById('upiId').value,
-                bank_account_name: document.getElementById('bankAccountName').value,
-                bank_account_number: document.getElementById('bankAccountNumber').value,
-                bank_ifsc_code: document.getElementById('bankIfscCode').value,
-                image_url: imagePath,
-            };
-
-            const { error } = await supabase
-                .from('shelters')
-                .update(updatedData)
-                .eq('id', currentShelter.id);
-
-            if (error) {
-                alert('Error updating profile: ' + error.message);
-            } else {
-                alert('Profile updated successfully!');
-                currentShelter = {...currentShelter, ...updatedData};
-                displayShelterInfo();
-            }
-        }
-
-        addNeedForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('need-title').value;
-            const category = document.getElementById('need-category').value;
-
-            const { error } = await supabase.from('needs').insert({
-                title,
-                category,
-                shelter_id: currentShelter.id,
-                user_id: currentUser.id
-            });
-
-            if (error) {
-                alert('Error adding need: ' + error.message);
-            } else {
-                addNeedForm.reset();
-                await loadNeeds();
-            }
-        });
-
-        needsList.addEventListener('click', async (e) => {
-            if (e.target.closest('.delete-need-btn')) {
-                const needId = e.target.closest('.delete-need-btn').dataset.id;
-                if (confirm('Are you sure you want to delete this need?')) {
-                    const { error } = await supabase.from('needs').delete().eq('id', needId);
-                    if (error) {
-                        alert('Error deleting need: ' + error.message);
-                    } else {
-                        await loadNeeds();
-                    }
-                }
-            }
-        });
-        
-        logoutButton.addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            window.location.href = 'index.html';
-        });
-
-        editProfileForm.addEventListener('submit', handleProfileUpdate);
-
-        checkAuthAndLoadData();
-    </script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
 
